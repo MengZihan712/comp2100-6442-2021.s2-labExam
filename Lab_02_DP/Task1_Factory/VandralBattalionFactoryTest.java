@@ -1,5 +1,3 @@
-package Task1_Factory;
-
 import org.junit.Test;
 
 import static org.junit.Assert.*;

@@ -1,5 +1,3 @@
-package Task1_Factory;
-
 /**
  * The Vandral Battalion to the spawned in to fight against.
  */

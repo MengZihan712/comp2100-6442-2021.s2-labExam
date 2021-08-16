@@ -1,5 +1,3 @@
-package Task1_Factory;
-
 /**
  * The following enumeration (special) class simply defines the different levels of difficulty
  */
