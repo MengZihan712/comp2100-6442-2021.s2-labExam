@@ -56,7 +56,7 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
          */
 
         // Ensure input is not null.
-        if (value == null)
+        if (element == null)
             throw new IllegalArgumentException("Input cannot be null");
 
         if (element.compareTo(value) > 0) {

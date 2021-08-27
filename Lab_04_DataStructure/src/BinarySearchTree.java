@@ -35,7 +35,7 @@ public class BinarySearchTree<T extends Comparable<T>> extends Tree<T> {
          */
 
         // Ensure input is not null.
-        if (value == null)
+        if (element == null)
             throw new IllegalArgumentException("Input cannot be null");
 
         if (element.compareTo(value) == 0) {
@@ -50,7 +50,7 @@ public class BinarySearchTree<T extends Comparable<T>> extends Tree<T> {
     @Override
     public BinarySearchTree<T> insert(T element) {
         // Ensure input is not null.
-        if (value == null)
+        if (element == null)
             throw new IllegalArgumentException("Input cannot be null");
 
         // If the two values are equal, in this implementation we want to insert to the left.
