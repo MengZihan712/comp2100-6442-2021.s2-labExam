@@ -82,16 +82,16 @@ public class BTree<T extends Comparable<T>> {
         if (node == null || childToSplit == null)
             throw new IllegalArgumentException("Input cannot be null");
 
-        // Get medium key
+        // Get median key
         int med = childToSplit.keys.size() / 2;
         T medValue = childToSplit.keys.get(med);
 
-        // Add the medium key to the parent node in the correct position.
+        // Add the median key to the parent node in the correct position.
         this.addInOrder(node.keys, medValue);
 
-        // TODO: get an array of everything right of the medium.
+        // TODO: get an array of everything right of the median.
 
-        // TODO: get an array of everything left of the medium.
+        // TODO: get an array of everything left of the median.
 
         // TODO: think of and write the rest of the split method. You may also choose to re-write the above.
     }
@@ -230,6 +230,11 @@ public class BTree<T extends Comparable<T>> {
          * @return minimum key of the BTree
          */
         public T min() {
+            // Ensure that the BTreeNode is not empty (note that if there are no keys, then there can't be children).		
+            if (this.keys.size() == 0) {		
+                return null;		
+            }		
+
             // Check if leaf
             if (this.children.size() == 0) {
                 // Return minimum value (should be left most).
