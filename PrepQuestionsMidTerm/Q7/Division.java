@@ -6,9 +6,14 @@ public class Division extends Operation {
 	}
 
 	@Override
-	public double evaluate() {
+	public double evaluate() throws ArithmeticException{
 
 		//START YOUR CODE
+		if (this.b==0){
+			throw new ArithmeticException();
+		} else {
+			return this.a/this.b;
+		}
 
 
 

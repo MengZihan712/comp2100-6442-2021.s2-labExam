@@ -11,10 +11,27 @@ public class BST {
 	 * Please implement this method and feel free to add additional helper methods
 	 * @return
 	 */
+	public Integer getOdd(Node X){
+		if (X!= null){
+			int demo=0;
+			demo=demo+getOdd(X.left);
+			demo=demo+getOdd(X.right);
+
+			if (X.left!=null && X.right==null){
+				demo=demo+X.value;
+			} else if(X.left==null && X.right!=null){
+				demo=demo+X.value;
+			}
+			return demo;
+		} else {
+			return 0;
+		}
+	}
+
 	public Integer oddNodeSum() {
 		// START YOUR CODE
 		
-		return null; //you are allowed to change this return statement
+		return getOdd(root); //you are allowed to change this return statement
 		// END YOUR CODE
 	}
 	

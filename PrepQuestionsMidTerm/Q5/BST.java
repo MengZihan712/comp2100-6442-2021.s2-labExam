@@ -11,13 +11,55 @@ public class BST {
 	}
 
 	/**
+	 * Get a DNA String with the given input node depends on rule 1 and 3.
+	 * @param X
+	 * @return
+	 */
+	public String addString(Node X){
+		String demo="";
+
+		if (X!=null){
+			demo=demo+addString(X.left);
+			demo=demo+addString(X.right);
+
+			if (X.left!=null && X.right==null){
+				demo=demo+X.value;
+			} else if(X.left==null && X.right!=null){
+				demo=demo+X.value;
+			}
+			return demo;
+		} else {
+			return demo;
+		}
+	}
+
+
+	/**
 	 * Please implement this method and feel free to add additional helper methods
 	 * @return The results which follows the rules specified in the given question sheet
 	 */
 	public String DNAGenerator(Integer key) {
 		// START YOUR CODE
+
+		if (find(root,key)==null){
+			return "CGTA";
+		} else {
+			Node start = find(root,key);
+
+			String a =addString(start);
+			if (a.length()==0){
+				return null;
+			}else {
+				return a;
+			}
+		}
+
+
+
+
+
 		
-		return null;// You are allowed to remove or change this default return value
+		// You are allowed to remove or change this default return value
 		// END YOUR CODE
 	}
 

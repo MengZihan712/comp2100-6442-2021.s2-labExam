@@ -17,6 +17,8 @@ public class BranchComplete {
          *  account for such a scenario.
          */
 
+
+
         // First identify the level of understanding of the earthling.
         try {
             int number = Integer.parseInt(responseToFriendshipRequest);

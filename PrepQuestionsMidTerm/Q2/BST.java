@@ -10,10 +10,27 @@ public class BST {
 	 * Please implement this method and feel free to add additional helper methods
 	 * @return
 	 */
+
+	public Integer getEven(Node X){
+		if (X!= null){
+			int demo=0;
+			demo=demo+ getEven(X.left);
+			demo=demo+ getEven(X.right);
+
+			if (X.left!=null && X.right!=null){
+				demo=demo+X.value;
+			} else if (X.left==null && X.right==null){
+				demo=demo+X.value;
+			}
+			return demo;
+		} else {
+			return 0;
+		}
+	}
 	public Integer evenNodeSum() {
 		// START YOUR CODE
 		
-		return null; //you are allowed to change this return statement
+		return getEven(root); //you are allowed to change this return statement
 		// END YOUR CODE
 	}
 	

@@ -21,7 +21,11 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
             - value
             - leftNode
             - rightNode
+
+
      */
+
+    //int height = 0;
 
     public AVLTree(T value) {
         super(value);
@@ -47,6 +51,8 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
         return leftNode.getHeight() - rightNode.getHeight();
     }
 
+
+
     @Override
     public AVLTree<T> insert(T element) {
         /*
@@ -59,16 +65,83 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
         if (element == null)
             throw new IllegalArgumentException("Input cannot be null");
 
+
+
+
+
+        // Travelling up from inserted node = 在递归 往回递的时候做判断。
+
+        AVLTree<T> demo = null;
         if (element.compareTo(value) > 0) {
             // COMPLETE
+            // rightNode is empty, insert ele here!
+            if (this.rightNode instanceof EmptyAVL) {
+                demo = new AVLTree<>(this.value, this.leftNode, new AVLTree<>(element));
+
+            } else {
+                // rightNode has things, compare recursively.
+                //AVLTree<T> newRight = (AVLTree<T>)this.rightNode;
+                demo = new AVLTree<>(value, leftNode, rightNode.insert(element));
+            }
+
         } else if (element.compareTo(value) < 0) {
             // COMPLETE
+            // leftNode is empty, insert ele here!
+            if (this.leftNode instanceof EmptyAVL) {
+                demo = new AVLTree<>(value, new AVLTree<>(element), this.rightNode);
+            } else {
+                // leftNode has things, compare recursively.
+                //AVLTree<T> newLeft = (AVLTree<T>)this.leftNode;
+                demo = new AVLTree<>(value, leftNode.insert(element), rightNode);
+            }
+
         } else {
             // COMPLETE
+            demo = new AVLTree<>(value, leftNode, rightNode);
         }
 
-        return this; // Change to return something different
+        //每次递归 demo的唯一出口：
+        //在这判断balance factor：
+
+
+        //?????????????????????????????     EmpAVL Error
+        //LL case or LR case
+        if (demo.getBalanceFactor()>1){
+
+            //LR case (Left Right rotation)
+            if (element.compareTo(demo.leftNode.value)>0){
+                demo.leftNode=( (AVLTree<T>) demo.leftNode).leftRotate();
+                demo=demo.rightRotate();
+
+            //LL case (Single Right rotation)
+            } else{
+                demo= demo.rightRotate();
+
+            }
+        }
+
+        //LL case or LR case
+        if (demo.getBalanceFactor()<-1){
+
+            //RL case (Right Left rotation)
+            if (element.compareTo(demo.rightNode.value)<0){
+                demo.rightNode=( (AVLTree<T>)demo.rightNode).rightRotate();
+                demo=demo.leftRotate();
+
+            //RR case (Single Left rotation)
+            } else{
+                demo=demo.leftRotate();
+
+            }
+        }
+
+
+        return demo; // Change to return something different
     }
+
+
+
+
 
     /**
      * Conducts a left rotation on the current node.
@@ -92,11 +165,12 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
             than something about your code is incorrect!
          */
 
-        Tree<T> newParent = this.rightNode;
-        Tree<T> newRightOfCurrent = newParent.leftNode;
-        // COMPLETE
+        Tree<T> newRootY = this.rightNode;
+        Tree<T> newRightOfCurrentX = newRootY.leftNode;
+        this.rightNode = newRightOfCurrentX;
+        newRootY.leftNode = this;
 
-        return null; // Change to return something different
+        return (AVLTree<T>) newRootY; // Change to return something different
     }
 
     /**
@@ -121,7 +195,15 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
             than something about your code is incorrect!
          */
 
-        return null; // Change to return something different
+        Tree<T> newRootX = this.leftNode;
+
+        Tree<T> newLeftOfCurrentY = newRootX.rightNode;
+        this.leftNode = newLeftOfCurrentY;
+
+        newRootX.rightNode = this;
+
+
+        return (AVLTree<T>) newRootX; // Change to return something different
     }
 
     /**
@@ -137,3 +219,4 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
         }
     }
 }
+

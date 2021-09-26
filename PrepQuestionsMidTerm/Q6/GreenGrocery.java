@@ -16,9 +16,7 @@ public class GreenGrocery implements Grocery<Fruit> {
 	public void restock(List<Fruit> fruits) {
 
 		//START YOUR CODE
-
-
-
+		this.fruits.addAll(fruits);
 		//END YOUR CODE
 	}
 
@@ -26,6 +24,9 @@ public class GreenGrocery implements Grocery<Fruit> {
 	public Iterator<Fruit> getIterator() {
 		return new FruitIterator(this);
 	}
+
+
+
 
 	public class FruitIterator implements Iterator<Fruit> {
 
@@ -35,32 +36,32 @@ public class GreenGrocery implements Grocery<Fruit> {
 			this.grocery = grocery;
 		}
 
-		int index;
+		int index=-1;
 
 		@Override
 		public boolean hasNext() {
 
 			// START YOUR CODE
-
-
-
-			//You are allowed to change this return value.
-			return false;
-
-			// END YOUR CODE
+			if (index+1<this.grocery.getFruits().size()){
+				return true;
+			} else{
+				return false;
+			}
 		}
 
 		@Override
 		public Fruit next() {
-
 			// START YOUR CODE
+			Fruit res= null;
+
+			if (this.hasNext()){
+				res=this.grocery.getFruits().get(++index);
+
+			}
 
 
+			return res;
 
-			//You are allowed to change this return value.
-			return null;
-
-			// END YOUR CODE
 		}
 	}
 }

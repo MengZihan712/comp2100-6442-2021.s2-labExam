@@ -14,10 +14,38 @@ public class RBTree<T extends Comparable<T>> {
 	 * Please implement this method and feel free to add additional helper methods
 	 * @return
 	 */
+
+	public boolean leafChecker(Node<T> X){
+		if (X.value!=null){
+
+
+			boolean demo1= leafChecker(X.left);
+			boolean demo2= leafChecker(X.right);
+
+			return demo1&&demo2;
+
+		} else {
+			if (X.colour==Colour.BLACK){
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+	}
+
 	public boolean testProp1() {
+		if (root.colour!=Colour.BLACK){
+			return false;
+		}
+
+		return leafChecker(root);
+
+
+
 		// START YOUR CODE
 		
-		return false; //you are allowed to change this return statement
+		//you are allowed to change this return statement
 		// END YOUR CODE
 	}
 
@@ -25,10 +53,41 @@ public class RBTree<T extends Comparable<T>> {
 	 * Please implement this method and feel free to add additional helper methods
 	 * @return
 	 */
+
+	public boolean parentChecker(Node<T> X){
+		if (X.value!=null){
+
+
+			boolean demo1= parentChecker(X.left);
+			boolean demo2= parentChecker(X.right);
+
+			boolean demo3=false;
+			if (X.colour==Colour.RED && X.parent.colour==Colour.BLACK){
+				demo3= true;
+			} else if (X.colour==Colour.BLACK){
+				demo3= true;
+			} else {
+				demo3= false;
+			}
+
+			return demo1&&demo2&&demo3;
+
+		} else {
+			if (X.colour==Colour.RED && X.parent.colour==Colour.BLACK){
+				return true;
+			} else if (X.colour==Colour.BLACK){
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+	}
+
 	public boolean testProp2() {
 		// START YOUR CODE
 		
-		return false; //you are allowed to change this return statement
+		return parentChecker(root); //you are allowed to change this return statement
 		// END YOUR CODE
 	}
 

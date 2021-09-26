@@ -54,11 +54,12 @@ public class Location implements Subject {
     public void detach(Observer observer) {
         // TODO: write this method so that it removes the user from the list of attendees (removes the attendee)
         if (observer != null) {
-            for (AttendanceLog atLog : attendanceLogs) {
-                if (atLog.getObserver().equals( observer)) {
-                    this.attendanceLogs.remove(atLog);
+            for (AttendanceLog attendanceLog: attendanceLogs){
+                if (attendanceLog.getObserver().equals(observer)){
+                    attendanceLogs.remove(attendanceLog);
                 }
             }
+            //attendanceLogs.removeIf(atLog -> atLog.getObserver().equals(observer));
         }
 
     }

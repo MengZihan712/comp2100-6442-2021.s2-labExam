@@ -1,3 +1,7 @@
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Objects;
+
 /**
  * Welcome!
  * You have two tasks:
@@ -52,9 +56,64 @@ public class BTree<T extends Comparable<T>> {
         if (key == null)
             throw new IllegalArgumentException("Input cannot be null");
 
+        // Purely insert first (insert to the leaf) and get the inserted node.
+        BTreeNode inserted = root.insert(key);   // Feel free to replace this.
 
-        root.insert(key);   // Feel free to replace this.
+        // Check if it is necessary to split.(recursively checking)
+        //When splitting, assume the current node is the parent of the childToSplit.
+        //If the childToSplit does not have a parent ( parent is null here), then make a new node as parent.
+
+
+        // Recursively check and split.
+        BTreeNode recurser = inserted;
+
+
+
+
+
+            while (recurser.keys.size() == order) {
+                //Need to split
+
+                //If the childToSplit does not have a parent (parent is null here, which means the whole tree is a small leaf here and root=leaf)
+                // , then make a new node as parent.(Change the root also!)
+
+                if (recurser.parent == null) {
+
+                BTreeNode newParent = new BTreeNode();
+                recurser.parent = newParent;
+                newParent.children.add(recurser);
+                split(recurser.parent, recurser);
+                root = recurser.parent;
+                recurser = root;
+
+                } else {
+                    //childToSplit has a parent
+                    split(recurser.parent, recurser);
+                    recurser=recurser.parent;
+                }
+
+            }
+
+
+
+
+
     }
+
+    /**
+     * Recursively check whether this need to be split and split if necessary.
+     *
+     * @param nodeToSplit The inserted node (going to be checked) after  [BTreeNode.insert()]
+     */
+
+    private void checkAndSplit(BTreeNode nodeToSplit) {
+        // Check if it is necessary to split.(recursively checking)
+        //When splitting, assume the current node is the parent of the childToSplit.
+        //If the childToSplit does not have a parent ( parent is null here), then make a new node as parent.
+
+
+    }
+
 
     /**
      * Will conduct a split on the provided indexed child of the provided node.
@@ -65,10 +124,10 @@ public class BTree<T extends Comparable<T>> {
      * on the node you want to split, you would need to have a reference to the parent of the current BTreeNode.
      * We chose not to pursue this. Please do not move this method into BTreeNode to prevent complications.
      *
-     * @param node         The current node whose provided child to split will be split.
-     * @param childToSplit The child to split within the provided node.
+     * @param node         The current node whose provided (child to split) will be split.// current node, parent of the 2nd parameter
+     * @param childToSplit The child to split within the provided node.// the node to split, 1st parameter's child.
      */
-    private void split(BTreeNode node, BTreeNode childToSplit) {
+    private void split(BTreeNode node, BTreeNode childToSplit) {//pure split, assume having the parent.
         /*
              Task 1.
              TODO: complete this split method.
@@ -89,11 +148,56 @@ public class BTree<T extends Comparable<T>> {
         // Add the median key to the parent node in the correct position.
         this.addInOrder(node.keys, medValue);
 
-        // TODO: get an array of everything right of the median.
+        // Two new children as the split result.
+        BTreeNode left = new BTreeNode();
+        left.parent = node;
+        BTreeNode right = new BTreeNode();
+        right.parent = node;
 
-        // TODO: get an array of everything left of the median.
+        int pointerIndexBeforeInsertParent=node.children.indexOf(childToSplit);
+        node.children.set(pointerIndexBeforeInsertParent,left);
+        node.children.add(pointerIndexBeforeInsertParent+1,right);
 
-        // TODO: think of and write the rest of the split method. You may also choose to re-write the above.
+
+        if (childToSplit.children.size() != 0) {// childToSplit is an inner node
+            // TODO: get an array of everything left of the median.
+            for (int i = 0; i < med; i++) {
+                left.insert(childToSplit.keys.get(i));
+
+                childToSplit.children.get(i).parent = left;
+                left.children.add(childToSplit.children.get(i));
+            }
+            childToSplit.children.get(med).parent = left;
+            left.children.add(childToSplit.children.get(med));
+
+
+            // TODO: get an array of everything right of the median.
+            for (int i = med + 1; i < childToSplit.keys.size(); i++) {
+                right.insert(childToSplit.keys.get(i));
+            }
+
+            for (int i = med+1; i < childToSplit.children.size(); i++) {
+                childToSplit.children.get(i).parent = right;
+                right.children.add(childToSplit.children.get(i));
+
+            }
+
+            // TODO: think of and write the rest of the split method. You may also choose to re-write the above.
+
+        } else {// childToSplit  is a leaf
+
+            // TODO: get an array of everything left of the median.
+            for (int i = 0; i < med; i++) {
+                left.insert(childToSplit.keys.get(i));
+            }
+
+            // TODO: get an array of everything right of the median.
+            for (int i = med + 1; i < childToSplit.keys.size(); i++) {
+                right.insert(childToSplit.keys.get(i));
+            }
+
+            // TODO: think of and write the rest of the split method. You may also choose to re-write the above.
+        }
     }
 
     /**
@@ -162,6 +266,8 @@ public class BTree<T extends Comparable<T>> {
         /**
          * Fields of the node class.
          */
+        private BTreeNode parent;
+
         private LimitedArrayList<T> keys;               // Keys held by the node.
         private LimitedArrayList<BTreeNode> children;   // Children of the node.
 
@@ -193,6 +299,8 @@ public class BTree<T extends Comparable<T>> {
 
             // The limit on children is actually 'order' but at times we will go over by 1 in which we will need to split.
             this.children = new LimitedArrayList<>(order + 1);
+
+            this.parent = null;
         }
 
         /**
@@ -200,7 +308,7 @@ public class BTree<T extends Comparable<T>> {
          *
          * @param key to be inserted.
          */
-        private void insert(T key) {
+        private BTreeNode insert(T key) {// purely insert without splitting, return the inserted BTreeNode.
             /*
                 Task 1.
                 TODO: complete this method.
@@ -208,10 +316,39 @@ public class BTree<T extends Comparable<T>> {
                 Hint2: remember to check if you need to split.
              */
 
+
             // Ensure input is not null.
             if (key == null)
                 throw new IllegalArgumentException("Input cannot be null");
 
+
+            // Is a leaf
+            if (this.children.size() == 0) {
+
+                addInOrder(this.keys, key);
+                return this;
+
+            } else {//Not a leaf, recursion
+
+                // look for the correct child
+                if (key.compareTo(this.keys.get(0)) < 0) {//最左
+                    return this.children.get(0).insert(key);
+
+                } else if (key.compareTo(this.keys.get(keys.size() - 1)) > 0) {//最右
+                    return this.children.get(children.size() - 1).insert(key);
+
+                } else {//在中间
+                    for (int i = 0; i + 1 < this.keys.size(); i++) {
+                        if (key.compareTo(this.keys.get(i)) > 0 && key.compareTo(this.keys.get(i + 1)) < 0) {
+                            int childIndex = i + 1;
+                            return this.children.get(childIndex).insert(key);
+                        }
+                    }
+                }
+            }
+
+
+            return null;
         }
 
         /**
@@ -223,17 +360,31 @@ public class BTree<T extends Comparable<T>> {
                 TODO: complete this method.
              */
 
-            return this.keys.get(0); // Replace this
+            if (this.keys.size() == 0) {
+                return null;
+            }
+
+            // Check if leaf
+            if (this.children.size() == 0) {
+                // Return minimum value (should be left most).
+                return this.keys.get(keys.size()-1);
+            } else {
+                // Recurse through the leftmost node.
+                return this.children.get(children.size()-1).max();
+            }
+
+
+
         }
 
         /**
          * @return minimum key of the BTree
          */
         public T min() {
-            // Ensure that the BTreeNode is not empty (note that if there are no keys, then there can't be children).		
-            if (this.keys.size() == 0) {		
-                return null;		
-            }		
+            // Ensure that the BTreeNode is not empty (note that if there are no keys, then there can't be children).
+            if (this.keys.size() == 0) {
+                return null;
+            }
 
             // Check if leaf
             if (this.children.size() == 0) {
@@ -273,4 +424,6 @@ public class BTree<T extends Comparable<T>> {
             return sb.toString();
         }
     }
+
+
 }

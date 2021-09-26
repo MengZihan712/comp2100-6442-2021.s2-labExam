@@ -102,8 +102,9 @@ public class PrinterQueue implements SimpleQueue<String> {
             return null;
         }
         String old= instance.queue.get(0);
-        List<String> demo= instance.queue.subList(1,instance.queue.size());
-        instance.queue=demo;
+        instance.queue.remove(old);
+        //List<String> demo= instance.queue.subList(1,instance.queue.size());
+        //instance.queue=demo;
         return old;
     }
 }
