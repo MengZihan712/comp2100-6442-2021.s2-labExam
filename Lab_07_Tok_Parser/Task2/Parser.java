@@ -71,7 +71,9 @@ public class Parser {
             Exp expression = parser.parseExp();
             System.out.println("Parsing: " + expression.show());
             System.out.println("Evaluation: " + expression.evaluate());
+
         }
+
     }
 
     /**
@@ -88,11 +90,24 @@ public class Parser {
          Hint 2: the possible grammar return '<term> + <exp>' correlates with the class (AddExp(term, exp)).
          */
         // ########## YOUR CODE STARTS HERE ##########
+        Exp term = this.parseTerm();
 
 
-        return null; // Change this return (if you want). It is simply a placeholder to prevent an error.
-        // ########## YOUR CODE ENDS HERE ##########
-    }
+        if (this.tokenizer.hasNext() && this.tokenizer.current().getType() == Token.Type.ADD) {
+            this.tokenizer.next();
+            Exp exp = this.parseTerm();
+            return new AddExp(term, exp);
+        } else if (this.tokenizer.hasNext() && this.tokenizer.current().getType() == Token.Type.SUB) {
+            this.tokenizer.next();
+            Exp exp = this.parseTerm();
+            return new SubExp(term, exp);
+        } else {
+            return term;
+        }
+
+    // ########## YOUR CODE ENDS HERE ##########
+
+}
 
     /**
      * Adheres to the grammar rule:
@@ -107,9 +122,20 @@ public class Parser {
          Hint: you know that the first item will always be a factor (according to the grammar).
          */
         // ########## YOUR CODE STARTS HERE ##########
+        Exp factor = this.parseFactor();
 
+        if (this.tokenizer.hasNext() && this.tokenizer.current().getType() == Token.Type.MUL) {
+            this.tokenizer.next();
+            Exp term = this.parseTerm();
+            return new MultExp(factor, term);
+        } else if (this.tokenizer.hasNext() && this.tokenizer.current().getType() == Token.Type.DIV) {
+            this.tokenizer.next();
+            Exp term = this.parseTerm();
+            return new DivExp(factor, term);
+        } else {
+            return factor;
+        }
 
-        return null; // Change this return (if you want). It is simply a placeholder to prevent an error.
         // ########## YOUR CODE ENDS HERE ##########
     }
 
@@ -128,8 +154,22 @@ public class Parser {
          */
         // ########## YOUR CODE STARTS HERE ##########
 
+        if (this.tokenizer.current().getType() == Token.Type.INT) {
+            Exp inte = new IntExp(Integer.parseInt(this.tokenizer.current().getToken()));
+            this.tokenizer.next();
+            return inte;
+        } else if (this.tokenizer.current().getType() == Token.Type.LBRA) {
+            this.tokenizer.next();
+            Exp exp = this.parseExp();
+            this.tokenizer.next();
+            return exp;
+        } else {
+            throw new IllegalProductionException("Tokens provided does not conform to the grammar in parsing factor!");
+        }
 
-        return null; // Change this return (if you want). It is simply a placeholder to prevent an error.
+        //          (((10 - 2) * (10 / 2)) + 1)
+
+
         // ########## YOUR CODE ENDS HERE ##########
     }
 }

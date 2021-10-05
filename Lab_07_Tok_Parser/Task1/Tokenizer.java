@@ -12,7 +12,9 @@ import java.util.Scanner;
  */
 public class Tokenizer {
     private String buffer;          // String to be transformed into tokens each time next() is called.
-    private Token currentToken;     // The current token. The next token is extracted when next() is called.
+    private Token currentToken;// The current token. The next token is extracted when next() is called.
+
+    //private int pos; // pointer
 
     /**
      * To help you both test and understand what this tokenizer is doing, we have included a main method
@@ -31,10 +33,12 @@ public class Tokenizer {
         System.out.println("Provide a mathematical string to be tokenized:");
         while (scanner.hasNext()) {
             String input = scanner.nextLine();
+            //System.out.println("Scanned a char:" + input);
 
             // Check if 'quit' is provided.
             if (input.equals("q"))
                 break;
+
 
             // Create an instance of the tokenizer.
             Tokenizer tokenizer = new Tokenizer(input);
@@ -45,6 +49,7 @@ public class Tokenizer {
                 tokenizer.next();
             }
             System.out.println();
+
         }
     }
 
@@ -54,7 +59,8 @@ public class Tokenizer {
      * **** please do not modify this part ****
      */
     public Tokenizer(String text) {
-        buffer = text;          // save input text (string)
+        buffer = text;// save input text (string)
+        //pos=0;
         next();                 // extracts the first token.
     }
 
@@ -77,7 +83,7 @@ public class Tokenizer {
         char firstChar = buffer.charAt(0);
         if (firstChar == '+')
             currentToken = new Token("+", Token.Type.ADD);
-        if (firstChar == '-')
+        else if (firstChar == '-')
             currentToken = new Token("-", Token.Type.SUB);
 
         /*
@@ -87,8 +93,25 @@ public class Tokenizer {
          TODO: Throw an IllegalTokenException when a character which does not correlate to any token type is provided.
          Hint: Character.isDigit() may be useful.
          */
-        // ########## YOUR CODE STARTS HERE ##########
-
+            // ########## YOUR CODE STARTS HERE ##########
+        else if (firstChar == '*')
+            currentToken = new Token("*", Token.Type.MUL);
+        else if (firstChar == '/')
+            currentToken = new Token("/", Token.Type.DIV);
+        else if (firstChar == '(')
+            currentToken = new Token("(", Token.Type.LBRA);
+        else if (firstChar == ')')
+            currentToken = new Token(")", Token.Type.RBRA);
+        else if (Character.isDigit(firstChar)) {
+            String inte = firstChar + "";
+            int count = 1;
+            while (count<buffer.length() && Character.isDigit(buffer.charAt(count))) {
+                inte+=buffer.charAt(count);
+                count++;
+            }
+            currentToken = new Token("" + inte, Token.Type.INT);
+        } else
+            throw new Token.IllegalTokenException("Character does not match any token type!");
 
 
         // ########## YOUR CODE ENDS HERE ##########
