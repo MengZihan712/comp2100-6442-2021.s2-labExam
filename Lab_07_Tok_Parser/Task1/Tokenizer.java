@@ -64,6 +64,7 @@ public class Tokenizer {
         next();                 // extracts the first token.
     }
 
+
     /**
      * This function will find and extract a next token from {@code _buffer} and
      * save the token to {@code currentToken}.
@@ -138,5 +139,9 @@ public class Tokenizer {
      */
     public boolean hasNext() {
         return currentToken != null;
+    }
+
+    public String getBuffer(){
+        return this.buffer;
     }
 }

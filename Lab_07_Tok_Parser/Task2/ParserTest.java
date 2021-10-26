@@ -102,7 +102,7 @@ public class ParserTest {
             Exp exp = new Parser(tokenizer).parseExp();
         });
 
-        assertThrows(Parser.IllegalProductionException.class, () -> {
+        assertThrows(Parser.IllegalProductionException.class, () -> {//---------------------
             tokenizer = new Tokenizer("1 5");
             Exp exp = new Parser(tokenizer).parseExp();
         });
@@ -117,15 +117,20 @@ public class ParserTest {
             Exp exp = new Parser(tokenizer).parseExp();
         });
 
+
         assertThrows(Parser.IllegalProductionException.class, () -> {
             tokenizer = new Tokenizer("1+2)");
             Exp exp = new Parser(tokenizer).parseExp();
         });
 
+
+
         assertThrows(Parser.IllegalProductionException.class, () -> {
             tokenizer = new Tokenizer("1-2)");
             Exp exp = new Parser(tokenizer).parseExp();
         });
+
+
 
         assertThrows(Parser.IllegalProductionException.class, () -> {
             tokenizer = new Tokenizer("1/2)");

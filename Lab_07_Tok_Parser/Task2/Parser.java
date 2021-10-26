@@ -1,5 +1,5 @@
 import java.util.Scanner;
-
+//Ke Ning
 /**
  * Note: You will need to have completed task 1 to complete this task.
  * <p>
@@ -30,6 +30,7 @@ public class Parser {
 
     // The tokenizer (class field) this parser will use.
     Tokenizer tokenizer;
+    private int RBNum = 0;
 
     /**
      * Parser class constructor
@@ -76,6 +77,8 @@ public class Parser {
 
     }
 
+    //(((10 - 2) * (10 / 2)) + 1)
+
     /**
      * Adheres to the grammar rule:
      * <exp>    ::= <term> | <term> + <exp> | <term> - <exp>
@@ -93,6 +96,37 @@ public class Parser {
         Exp term = this.parseTerm();
 
 
+        if (this.tokenizer.hasNext()){
+            if (this.tokenizer.current().getType() == Token.Type.ADD){
+                this.tokenizer.next();
+                Exp exp = this.parseTerm();
+
+                if (this.tokenizer.current()!=null && this.tokenizer.getBuffer().length()==0 &&this.tokenizer.current().getType() == Token.Type.RBRA){
+                    throw new IllegalProductionException("lack of (");
+                }
+                return new AddExp(term, exp);
+            } else if (this.tokenizer.current().getType() == Token.Type.SUB){
+                this.tokenizer.next();
+                Exp exp = this.parseTerm();
+                if (this.tokenizer.current()!=null && this.tokenizer.getBuffer().length()==0&&this.tokenizer.current().getType() == Token.Type.RBRA){
+                    throw new IllegalProductionException("lack of (");
+                }
+                return new SubExp(term, exp);
+            } else if (this.tokenizer.current().getType() == Token.Type.RBRA){
+
+                RBNum--;
+                if (RBNum < 0) {
+                    throw new IllegalProductionException("lack of (");
+                }
+
+            } else {
+
+                throw new IllegalProductionException("Tokens provided does not conform to the grammar in parsing exp!");
+            }
+        }
+        return term;
+
+        /*
         if (this.tokenizer.hasNext() && this.tokenizer.current().getType() == Token.Type.ADD) {
             this.tokenizer.next();
             Exp exp = this.parseTerm();
@@ -104,10 +138,11 @@ public class Parser {
         } else {
             return term;
         }
+         */
 
-    // ########## YOUR CODE ENDS HERE ##########
+        // ########## YOUR CODE ENDS HERE ##########
 
-}
+    }
 
     /**
      * Adheres to the grammar rule:
@@ -154,18 +189,30 @@ public class Parser {
          */
         // ########## YOUR CODE STARTS HERE ##########
 
-        if (this.tokenizer.current().getType() == Token.Type.INT) {
-            Exp inte = new IntExp(Integer.parseInt(this.tokenizer.current().getToken()));
-            this.tokenizer.next();
-            return inte;
-        } else if (this.tokenizer.current().getType() == Token.Type.LBRA) {
-            this.tokenizer.next();
-            Exp exp = this.parseExp();
-            this.tokenizer.next();
-            return exp;
-        } else {
-            throw new IllegalProductionException("Tokens provided does not conform to the grammar in parsing factor!");
+        if (this.tokenizer.hasNext()){
+            if (this.tokenizer.current().getType() == Token.Type.INT) {
+                Exp inte = new IntExp(Integer.parseInt(this.tokenizer.current().getToken()));
+                this.tokenizer.next();
+                return inte;
+
+            } else if (this.tokenizer.current().getType() == Token.Type.LBRA) {
+                RBNum++;
+                this.tokenizer.next();
+                Exp exp = this.parseExp();
+
+                if (this.tokenizer.current() == null || this.tokenizer.current().getType() != Token.Type.RBRA) {
+                    throw new IllegalProductionException("no ')'");
+                }
+                this.tokenizer.next();
+
+                return exp;
+
+            }
         }
+
+
+        throw new IllegalProductionException("Tokens provided does not conform to the grammar in parsing factor!");
+
 
         //          (((10 - 2) * (10 / 2)) + 1)
 
