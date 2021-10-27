@@ -50,6 +50,8 @@ public class LogicTests {
     @Test(timeout = 1000)
     public void getEmptyTest() {
         // No quotes added
+
+//        assertArrayEquals("Expected empty String[]", new String[0], requestHandler.getQuotes());
         assertArrayEquals("Expected empty String[]", new String[0], requestHandler.getQuotes());
         assertArrayEquals("Expected empty String[]", new String[0], requestHandler.getQuotes("sad"));
 

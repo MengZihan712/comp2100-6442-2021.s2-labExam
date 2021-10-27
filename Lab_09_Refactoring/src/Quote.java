@@ -14,28 +14,28 @@ public class Quote {
     // Fields
     private final String quote;
     private final QuoteType type;
-    private String quoteAuthor;
+//    private String quoteAuthor;
 
     // Constructors
     public Quote(String quote, QuoteType type) {
         this.quote = quote;
         this.type = type;
-        quoteAuthor = "";
+//        quoteAuthor = "";
     }
 
     public Quote(String quote, QuoteType type, String quoteAuthor) {
         this.quote = quote;
         this.type = type;
-        this.quoteAuthor = quoteAuthor;
+//        this.quoteAuthor = quoteAuthor;
     }
 
     /**
      * Sets quote author
      * @param quoteAuthor String
      */
-    public void setQuoteAuthor(String quoteAuthor) {
-        this.quoteAuthor = quoteAuthor;
-    }
+//    public void setQuoteAuthor(String quoteAuthor) {
+//        this.quoteAuthor = quoteAuthor;
+//    }
 
     /**
      * @return String quote
@@ -54,9 +54,9 @@ public class Quote {
     /**
      * @return String author name
      */
-    public String getQuoteAuthor() {
-        return quoteAuthor;
-    }
+//    public String getQuoteAuthor() {
+//        return quoteAuthor;
+//    }
 
     @Override
     public String toString() {
