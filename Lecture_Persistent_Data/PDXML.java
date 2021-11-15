@@ -37,9 +37,9 @@ public class PDXML {
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			Document d = db.parse(f); //parse file f, it is the root of the document tree
 			d.getDocumentElement().normalize(); //remove redundancies such as spaces between <  >, line breaks, some white spaces, ...
-			
+//----------------------------------------------------------------------------------------------------------
 			//get the list of nodes by tag name (all <person> items)
-			NodeList nl = d.getElementsByTagName("Person");
+			NodeList nl = d.getElementsByTagName("Person"); // 拿到根元素下面的元素 (是个list)
 			
 			for(int i = 0; i < nl.getLength(); i++)
 			{
@@ -76,8 +76,8 @@ public class PDXML {
 			Document d = db.newDocument(); //obtain new instance of a DOM document
 
 			//create the structure of my document
-			Element rootElement = d.createElement("People");//<People>
-			d.appendChild(rootElement); //append the root to the document
+			Element rootElement = d.createElement("People");//<People>  创建根节点
+			d.appendChild(rootElement); //append the root to the document 设置根节点 people
 
 			//loop through all people to create each person element
 			for(Person person : people)
@@ -93,7 +93,7 @@ public class PDXML {
 				lastnameElement.appendChild(d.createTextNode(person.getLastname()));
 				personElement.appendChild(lastnameElement);
 				
-				rootElement.appendChild(personElement);
+				rootElement.appendChild(personElement); // 将person元素放入根节点 people
 			}
 
 			//transform a source tree into a result tree
