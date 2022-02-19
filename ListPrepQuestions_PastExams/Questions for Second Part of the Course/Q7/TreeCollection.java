@@ -57,7 +57,7 @@ public class TreeCollection {
 		try {
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			Document d = db.newDocument();
-
+//----------------------------------
 			Element rootElement = d.createElement("TreeCollection");
 			d.appendChild(rootElement);
 
@@ -147,7 +147,7 @@ public class TreeCollection {
 
 					//Dimension
 					Element dimensionElement =  (Element)element.getElementsByTagName("Dimension").item(0);
-					Dimension di = null;
+					Dimension di =  new Dimension();
 					if (dimensionElement != null) {
 						int diameter = Integer.parseInt(dimensionElement.getAttribute("diameter"));
 						int height = Integer.parseInt(dimensionElement.getAttribute("height"));

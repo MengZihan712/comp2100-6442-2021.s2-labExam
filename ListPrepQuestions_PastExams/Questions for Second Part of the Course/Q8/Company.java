@@ -1,9 +1,13 @@
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.*;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
 
 /**
  * 
@@ -37,12 +41,23 @@ public class Company {
 	public static Company loadFromJsonFile(File file) {
 
 		// START YOUR CODE
+		Gson gson = new Gson();
+		JsonReader jsonReader = null;
 
+		final Type CUS_LIST_TYPE = new TypeToken<Company>() {}.getType();
+		//or TypeToken.getParameterized(ArrayList.class, PersonJSON.class).getType();
+
+		try{
+			jsonReader = new JsonReader(new FileReader(file));
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return gson.fromJson(jsonReader, CUS_LIST_TYPE);
 
 
 		// END YOUR CODE
 
-		return null;
 	}
 	/**
 	 * Implement this method to serialize this company into the given file
@@ -52,7 +67,16 @@ public class Company {
 	public void serializeToFile(File file) {
 
 		// START YOUR CODE
-
+		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file)))
+		{
+			oos.writeObject(this.name);
+			oos.writeInt(this.employees.size());
+			for (Employee emp : employees) {
+				oos.writeObject(emp);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 
 		// END YOUR CODE
@@ -64,11 +88,11 @@ public class Company {
 	 */
 	public void deserializeFromFile(File file) {
 		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-			this.name = (String) ois.readObject();
+			name = (String) ois.readObject();
 			int size = ois.readInt();
-			this.employees = new ArrayList<>();
+			employees = new ArrayList<>();
 			for (int i = 0; i < size; i++) {
-				this.employees.add((Employee) ois.readObject());
+				employees.add((Employee) ois.readObject());
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -85,7 +109,15 @@ public class Company {
 	public void saveToJsonFile(File file) {
 
 		// START YOUR CODE
+		//Gson gson = new Gson();
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
+		try(FileWriter fw = new FileWriter(file)){
+			gson.toJson(this, fw);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 
 
 		// END YOUR CODE
@@ -99,7 +131,14 @@ public class Company {
 	public void removeEmployeesWhoDoNotKnowJava() {
 		// START YOUR CODE
 
-
+		Iterator<Employee> empIterator = employees.iterator();
+		while(empIterator.hasNext()){
+			Employee emp = empIterator.next();
+			if (!emp.getSkills().contains("Java")){
+				employees.remove(emp);
+			}
+		}
+//		employees.removeIf(emp -> !emp.getSkills().contains("Java"));
 
 		// END YOUR CODE
 	}
